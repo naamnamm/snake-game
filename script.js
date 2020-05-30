@@ -1,15 +1,29 @@
+//Done
 //draw a snack
 //make snack move
+
+//TO DO
+//control the snack movement
 //draw apple 
 //show apple randomly
 
 const log = console.log
 
 let xSpeed = 5;
-let interval;
+let ySpeed = 5;
+let intervalX;
+let intervalY;
+let keyCode;
 
 const stopButtonEl = document.getElementById('stop-btn');
-stopButtonEl.addEventListener('click', stopInterval)
+stopButtonEl.addEventListener('click', stopIntervalX)
+
+// const getKey = document.getElementById('get-key')
+// getKey.addEventListener('keydown', function (e) {
+//   log(e)
+// })
+
+
 
 window.onload = function () {
   let canvas = document.getElementById('game-canvas')
@@ -18,47 +32,75 @@ window.onload = function () {
   canvas.height = 400;
   let framePerSecond = 30;
   let xPosition = 450;
-  let snakeWidth = 100;
+  let yPosition = 100;
+  let snakeWidth = 20;
 
 
-  interval = setInterval(function () {
+  intervalX = setInterval(function () {
     xPosition += xSpeed
-    moveSnack(context, xPosition, snakeWidth);
-    drawSnack(context, xPosition, snakeWidth);
+    moveSnake(context, xPosition, yPosition, snakeWidth);
+    drawSnake(context, xPosition, yPosition, snakeWidth);
+  }, 1000 / framePerSecond)
 
-    log(xPosition);
-    log(xSpeed);
-
-
+  intervalY = setInterval(function () {
+    yPosition += ySpeed
+    moveSnake(context, xPosition, yPosition, snakeWidth);
+    drawSnake(context, xPosition, yPosition, snakeWidth);
   }, 1000 / framePerSecond)
 
 }
 
-function stopInterval() {
-  clearInterval(interval);
+// function startIntervalY() {
+//   setInterval(function () {
+//     let canvas = document.getElementById('game-canvas')
+//     let context = canvas.getContext('2d')
+//     canvas.width = 600;
+//     canvas.height = 400;
+//     let yPosition = 100;
+//     let snakeWidth = 20;
+//     let xPosition = context.canvas.width - snakeWidth
+//     yPosition += ySpeed
+//     moveSnake(context, xPosition, yPosition, snakeWidth);
+//     drawSnake(context, xPosition, yPosition, snakeWidth);
+//   }, 3000)
+// }
+
+
+function stopIntervalX() {
+  clearInterval(intervalX);
+}
+
+function stopIntervalY() {
+  clearInterval(intervalY);
 }
 
 
-function moveSnack(context, xPosition, snakeWidth) {
+function moveSnake(context, xPosition, yPosition, snakeWidth, keyCode) {
   //debugger;
-  if (xPosition > (context.canvas.width - snakeWidth)) {
-    xSpeed = -xSpeed
+  if (xPosition < (context.canvas.width - snakeWidth)) {
+    stopIntervalY();
+  }
+
+  if (xPosition === (context.canvas.width - snakeWidth)) {
+    stopIntervalX();
   }
 
   if (xPosition < 0) {
     xSpeed = -xSpeed
+    //TO DO: gameover
   }
 
 }
 
-function drawSnack(context, xPosition, snakeWidth) {
+function drawSnake(context, xPosition, yPosition, snakeWidth, keyCode) {
   //debugger;
-  log(xPosition)
   context.fillStyle = 'black';
   context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 
   context.fillStyle = 'skyblue';
-  context.fillRect(xPosition, 100, snakeWidth, 20);
+  context.fillRect(xPosition, yPosition, snakeWidth, 20);
+
+  log(xPosition, yPosition)
 
 }
 
