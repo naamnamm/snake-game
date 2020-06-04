@@ -6,15 +6,11 @@
 //show apple randomly
 
 //TO DO
-//check for colission
+//check for collusion
 
 const log = console.log
 let interval = null;
-let keyCode = null;
-let canvas = document.getElementById('game-canvas')
-let context = canvas.getContext('2d')
-canvas.width = 600;
-canvas.height = 400;
+
 
 const snake = {
   width: 20,
@@ -32,42 +28,43 @@ let snakePosition = [
   { x: 120, y: 150 }
 ];
 
-
 window.onload = function () {
 
-  let framePerSecond = 30;
+  let framePerSecond = 10;
+  let canvas = document.getElementById('game-canvas')
+  let context = canvas.getContext('2d')
+  canvas.width = 600;
+  canvas.height = 400;
 
   interval = setInterval(function () {
-    drawCanvas();
-    drawSnake();
+    drawCanvas(context);
+    drawSnake(context);
     moveSnake();
+    checkIfGameIsOver(context)
     controlSnake();
-    drawApple();
-  }, 1000 / 10)
+    drawApple(context);
+  }, 1000 / framePerSecond)
 
   const stopButtonEl = document.getElementById('stop-btn');
   stopButtonEl.addEventListener('click', stopInterval)
 
   document.body.addEventListener('keydown', e => snake.direction = e.key)
-
 }
 
 function stopInterval() {
   clearInterval(interval);
 }
 
-function drawCanvas() {
+function drawCanvas(context) {
   context.fillStyle = 'black';
   context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 }
 
-function drawSnake() {
-  snakePosition.forEach(position => drawSnakeParts(position))
-}
-
-function drawSnakeParts(position) {
-  context.fillStyle = 'skyblue';
-  context.fillRect(position.x, position.y, snake.width, snake.height);
+function drawSnake(context) {
+  snakePosition.forEach(position => {
+    context.fillStyle = 'skyblue';
+    context.fillRect(position.x, position.y, snake.width, snake.height)
+  })
 }
 
 function moveSnake() {
@@ -75,19 +72,21 @@ function moveSnake() {
 
   snakePosition.unshift(head);
   snakePosition.pop();
-
-  checkIfGameIsOver();
 }
 
-function checkIfGameIsOver() {
-  let gameOverX = snakePosition[0].x >= canvas.width || snakePosition[0].x <= 0;
+function checkIfGameIsOver(context) {
+  let gameOverX = snakePosition[0].x >= context.canvas.width || snakePosition[0].x <= 0;
 
-  let gameOverY = snakePosition[0].y >= canvas.height || snakePosition[0].y <= 0;
+  let gameOverY = snakePosition[0].y >= context.canvas.height || snakePosition[0].y <= 0;
 
   if (gameOverX || gameOverY) {
     resetTheGame()
   }
 }
+
+// function checkIfSnackEatsApple () {
+//   if (snakePosition[0].x  )
+// }
 
 function resetTheGame() {
   snakePosition = [
@@ -99,6 +98,7 @@ function resetTheGame() {
   ];
 
   snake.direction = 'ArrowRight';
+
 }
 
 function controlSnake() {
@@ -127,13 +127,14 @@ function controlSnake() {
   }
 }
 
-function drawApple() {
+function drawApple(context) {
   context.fillStyle = 'red';
   context.strokeStyle = "white";
   context.beginPath();
   context.arc(100, 100, 10, 0, 2 * Math.PI);
   context.fill()
   context.stroke();
+  log(context)
 }
 
 function getRandomApplePosition() {
