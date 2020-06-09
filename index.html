@@ -15,9 +15,30 @@
 
   <main>
     <p>y</p>
-    <canvas id='game-canvas'></canvas>
+    <div class='scoreboard-container'>
+      <div class='score-container'>
+        <div class='score-label'>
+          <p id='score-label'>Score:</p>
+        </div>
 
-    <div id='get-key'> </div>
+        <div class='score'>
+          <p id='score'> 0 </p>
+        </div>
+      </div>
+
+      <div class='bestScore-container'>
+        <div class='bestScore-label'>
+          <p id='bestScore-label'>Best Score:</p>
+        </div>
+
+        <div class='score'>
+          <p id='score'> 0 </p>
+        </div>
+      </div>
+    </div>
+
+    <div class='canvas-container'> <canvas id='game-canvas'></canvas></div>
+
 
     <button id='stop-btn'> stop interval </button>
   </main>

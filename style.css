@@ -1,6 +1,21 @@
 
-#game-canvas {
-  margin: 20px;
-  border: 1px solid #999;
-  background-color: beige;
+
+.canvas-container {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.scoreboard-container, .score-container, .bestScore-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scoreboard-container {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.score-container {
+  margin-right: 20px;
 }
