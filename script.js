@@ -1,5 +1,4 @@
 //to do
-// snake touch itself
 // keep track of the score
 
 const DEBUG = true;
@@ -23,7 +22,7 @@ const snake = {
 }
 
 window.onload = function () {
-  let timeInterval = 100;
+  let timeInterval = 1000;
   let canvas = document.getElementById('game-canvas')
   let context = canvas.getContext('2d')
   canvas.width = 600;
@@ -179,57 +178,44 @@ function isGameOver(context, apple) {
     resetTheGame();
   }
 
-  //touch itself
-  let snakeBodyX = snake.position.slice(3, snake.position.length).map(body => body.x)
-  let snakeBodyY = snake.position.slice(3, snake.position.length).map(body => body.y)
-
-  //for headx === for each bodyx (exclude head) && i match as well
-  let touchItselfUpDownX = snakeBodyX.indexOf(snakeHead.x) >= 0;
-  let touchItselfDownY = snakeBodyY.indexOf(snakeHead.y + 20) >= 0;
-  let touchItselfUpY = snakeBodyY.indexOf(snakeHead.y - 20) >= 0;
+  let snakeBody = snake.position.slice(1, snake.position.length)
 
   if (snake.direction === 'down') {
-    if (touchItselfUpDownX && touchItselfDownY) {
-      apple.position.x = getRandomApplePosition(context)[0]
-      apple.position.y = getRandomApplePosition(context)[1]
-      resetTheGame();
-    }
+    snakeBody.forEach(body => {
+      if ((snakeHead.x === body.x) && (snakeHead.y + 20 === body.y)) {
+        resetTheGame();
+      }
+    })
   }
 
   if (snake.direction === 'up') {
-    if (touchItselfUpDownX && touchItselfUpY) {
-      apple.position.x = getRandomApplePosition(context)[0]
-      apple.position.y = getRandomApplePosition(context)[1]
-      resetTheGame();
-    }
+    snakeBody.forEach(body => {
+      if ((snakeHead.x === body.x) && (snakeHead.y - 20 === body.y)) {
+        resetTheGame();
+      }
+    })
   }
 
-  let touchItselfRightLeftY = snakeBodyY.indexOf(snakeHead.y) >= 0;
-  let touchItselfRightX = snakeBodyX.indexOf(snakeHead.x + 20) >= 0;
-  let touchItselfLeftX = snakeBodyX.indexOf(snakeHead.x - 20) >= 0;
-
   if (snake.direction === 'right') {
-    if (touchItselfRightLeftY && touchItselfRightX) {
-      apple.position.x = getRandomApplePosition(context)[0]
-      apple.position.y = getRandomApplePosition(context)[1]
-      resetTheGame();
-    }
+    snakeBody.forEach(body => {
+      if ((snakeHead.x + 20 === body.x) && (snakeHead.y === body.y)) {
+        resetTheGame();
+      }
+    })
   }
 
   if (snake.direction === 'left') {
-    if (touchItselfRightLeftY && touchItselfLeftX) {
-      apple.position.x = getRandomApplePosition(context)[0]
-      apple.position.y = getRandomApplePosition(context)[1]
-      resetTheGame();
-    }
+    snakeBody.forEach(body => {
+      if ((snakeHead.x - 20 === body.x) && (snakeHead.y === body.y)) {
+        resetTheGame();
+      }
+    })
   }
-
-  //currentScore = 0;
-  //log(currentScore)
 
 }
 
 function resetTheGame() {
+  debugger;
   snake.position = [
     { x: 200, y: 140 },
     { x: 180, y: 140 },
