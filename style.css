@@ -1,4 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Ubuntu:wght@300&display=swap');
 
+body {
+  /* background-image: url(https://images.wallpaperscraft.com/image/background_warrior_minimalism_patterns_black_white_28111_1680x1050.jpg); */
+  background-image: url(https://lh3.googleusercontent.com/proxy/ZVGtCOFTlq4FFyZOVfYfJqJP3SzB0o03TPIVsaojO_pIEVt9LcMUwh5_gG3o95hz4SEfqe51vaUOLZvuM9YrWbyFp_TkKRFY8bfdCDJtVXlHOfcJXVicIvjeOD_eR5ryMlJHVZ12T1FI3kHe_7S2Bg6Ijk4actcObBNcBm6jFML5Uqkznik);
+  background-size: cover;
+}
+
+.body-container {
+  padding-top: 5px;
+  width: 650px;
+  height: 620px;
+  margin: 20px auto 0;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.header {
+  margin: 25px auto 0;
+  text-align: center;
+  width: 598px;
+  border: 1px solid black;
+  background-color: black;
+  color: white;
+  font-family: 'Ubuntu', sans-serif;
+  letter-spacing: 5px;
+}
 
 .canvas-container {
   width: 600px;
@@ -12,10 +38,47 @@
 }
 
 .scoreboard-container {
-  width: 600px;
+  width: 596.8px;
   margin: 0 auto;
+  border:  1px solid black;
 }
 
 .score-container {
   margin-right: 20px;
+  border: 1px solid white;
+  padding: 0 10px;
+  color: black;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: large;
+  font-weight: bold;
+  letter-spacing: 1px;;
+}
+
+  .score-label {
+    margin-right: 5px;
+  }
+
+  .bestScore-label {
+    margin-right: 5px;
+  }
+
+.bestScore-container {
+  border: 1px solid white;
+  padding: 0 10px;
+  color: black;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: large;
+  font-weight: bold;
+  letter-spacing: 1px;;
+}
+
+.stop-btn-container {
+  display: flex;
+  justify-content: space-between;
+  width: 150px;
+  margin: 10px auto 0;
+}
+
+button {
+  cursor: pointer;
 }

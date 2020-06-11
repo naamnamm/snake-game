@@ -9,38 +9,43 @@
 </head>
 
 <body>
-  <header>
-    <h1>Snake Game</h1>
-  </header>
+  <div class='body-container'>
+    <header>
+      <div class='header'>
+        <h1>Snake Game</h1>
+      </div>
+    </header>
 
-  <main>
-    <p>y</p>
-    <div class='scoreboard-container'>
-      <div class='score-container'>
-        <div class='score-label'>
-          <p id='score-label'>Score:</p>
+    <main>
+      <div class='scoreboard-container'>
+        <div class='score-container'>
+          <div class='score-label'>
+            <p id='score-label'>Score:</p>
+          </div>
+
+          <div class='score'>
+            <p id='score'> 0 </p>
+          </div>
         </div>
 
-        <div class='score'>
-          <p id='score'> 0 </p>
+        <div class='bestScore-container'>
+          <div class='bestScore-label'>
+            <p id='bestScore-label'>Best Score:</p>
+          </div>
+
+          <div class='score'>
+            <p id='best-score'> 0 </p>
+          </div>
         </div>
       </div>
 
-      <div class='bestScore-container'>
-        <div class='bestScore-label'>
-          <p id='bestScore-label'>Best Score:</p>
-        </div>
+      <div class='canvas-container'> <canvas id='game-canvas'></canvas></div>
 
-        <div class='score'>
-          <p id='score'> 0 </p>
-        </div>
+      <div class='stop-btn-container'>
+        <button id='stop-btn'> Stop </button>
+        <button id='reset-btn'> Reset </button>
       </div>
-    </div>
-
-    <div class='canvas-container'> <canvas id='game-canvas'></canvas></div>
-
-
-    <button id='stop-btn'> stop interval </button>
+  </div>
   </main>
   <script src="script.js"></script>
 </body>
