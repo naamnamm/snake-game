@@ -1,7 +1,6 @@
-const DEBUG = false;
-
-const log = console.log
 let interval = null;
+let currentScore = 0;
+let bestScore = 0;
 
 const snake = {
   width: 20,
@@ -21,15 +20,10 @@ const snake = {
 const apple = {
   radius: 10,
   position: {
-    x: getRandomApplePosition(20, 580),
-    y: getRandomApplePosition(20, 380)
+    x: getRandomNum(0, 580),
+    y: getRandomNum(0, 380)
   }
 }
-
-let currentScore = 0;
-let bestScore = 0;
-let randomAppleX = null;
-let randomAppleY = null;
 
 window.onload = function () {
   let timeInterval = 150;
@@ -39,12 +33,6 @@ window.onload = function () {
   canvas.height = 400;
 
   let keyCode = null;
-
-  if (DEBUG === true) {
-    apple.position.x = 300;
-    apple.position.y = 140;
-    timeInterval = 100;
-  }
 
   interval = setInterval(function () {
     drawCanvas(context);
@@ -220,36 +208,21 @@ function increaseSnakeSize() {
 }
 
 function createNewApple(context) {
-  apple.position.x = getRandomApplePosition(20, context.canvas.width - 40);
-  apple.position.y = getRandomApplePosition(20, context.canvas.height - 40);
-
-  if (apple.position.x === 0 || apple.position.y === 0) {
-    //debugger;
-    apple.position.x = getRandomApplePosition(20, context.canvas.width - 20);
-    apple.position.y = getRandomApplePosition(20, context.canvas.height - 20);
-  }
-
+  apple.position.x = getRandomNum(0, context.canvas.width - 20);
+  apple.position.y = getRandomNum(0, context.canvas.height - 20);
 
   snake.position.forEach(position => {
     let appleOnSnake = apple.position.x == position.x && apple.position.y == position.y;
-    log(appleOnSnake);
     if (appleOnSnake) {
-      debugger;
-      apple.position.x = getRandomApplePosition(20, context.canvas.width - 20);
-      apple.position.y = getRandomApplePosition(20, context.canvas.height - 20);
+      apple.position.x = getRandomNum(0, context.canvas.width - 20);
+      apple.position.y = getRandomNum(0, context.canvas.height - 20);
     }
   })
-
 }
 
-function getRandomApplePosition(min, max) {
+function getRandomNum(min, max) {
   return 20 * Math.floor((Math.random() * ((max - min) + min) / 20));
 }
-
-
-// function isAppleOnSnake() {
-//   let appleOnSnake = apple.position.x == position.x && apple.position.y == position.y;
-// }
 
 function updateScore() {
   document.getElementById('score').textContent = currentScore;
@@ -284,6 +257,6 @@ function resetTheGame(context) {
   createNewApple(context);
 }
 
-// will create new apple and does snake eat apple collide - don't think so.
+
 
 
