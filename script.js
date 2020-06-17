@@ -1,7 +1,3 @@
-let interval = null;
-let currentScore = 0;
-let bestScore = 0;
-
 const snake = {
   width: 20,
   height: 20,
@@ -26,28 +22,45 @@ const apple = {
 }
 
 window.onload = function () {
-  let timeInterval = 150;
-  let canvas = document.getElementById('game-canvas')
-  let context = canvas.getContext('2d')
+  let canvas = document.getElementById('game-canvas');
+  let context = canvas.getContext('2d');
   canvas.width = 600;
   canvas.height = 400;
 
-  let keyCode = null;
+  let interval = null;
+  let timeInterval = 150;
+  let currentScore = 0;
+  let bestScore = 0;
 
   interval = setInterval(function () {
     drawCanvas(context);
     drawApple(context);
-    isGameOver(context)
     moveSnake();
     drawSnake(context);
-    doesSnakeEatApple(context)
-  }, timeInterval)
+
+    if (doesSnakeTouchTheWall(context) || doesSnakeTouchItself()) {
+      if (bestScore <= currentScore) {
+        bestScore = currentScore;
+      }
+      currentScore = 0;
+      resetTheGame(context, currentScore, bestScore);
+    }
+
+    if (doesSnakeEatApple()) {
+      currentScore += 1;
+
+      increaseSnakeSize();
+      createNewApple(context);
+      updateScore(currentScore);
+    }
+
+  }, timeInterval);
 
   const stopButtonEl = document.getElementById('stop-btn');
   stopButtonEl.addEventListener('click', function (e) {
     clearInterval(interval);
     interval = null;
-  })
+  });
 
   const restartButtonEl = document.getElementById('restart-btn');
   restartButtonEl.addEventListener('click', function (e) {
@@ -55,20 +68,35 @@ window.onload = function () {
       return;
     }
 
-    resetTheGame(context)
+    currentScore = 0;
+    resetTheGame(context, currentScore, bestScore);
 
     interval = setInterval(function () {
       drawCanvas(context);
       drawApple(context);
-      isGameOver(context)
       moveSnake();
       drawSnake(context);
-      doesSnakeEatApple(context)
+
+      if (doesSnakeTouchTheWall(context) || doesSnakeTouchItself()) {
+        if (bestScore <= currentScore) {
+          bestScore = currentScore;
+        }
+        currentScore = 0;
+        resetTheGame(context, currentScore, bestScore);
+      }
+
+      if (doesSnakeEatApple(currentScore)) {
+        currentScore += 1;
+
+        increaseSnakeSize();
+        createNewApple(context);
+        updateScore(currentScore);
+      }
     }, timeInterval)
   })
 
   document.addEventListener('keydown', function (e) {
-    keyCode = e.key
+    let keyCode = e.key;
 
     if (keyCode === 'ArrowDown') {
       if (snake.direction === 'up') {
@@ -110,7 +138,6 @@ window.onload = function () {
       }
     }
   });
-
 }
 
 function drawCanvas(context) {
@@ -123,54 +150,8 @@ function drawApple(context) {
   context.strokeStyle = "white";
   context.beginPath();
   context.arc(apple.position.x + apple.radius, apple.position.y + apple.radius, apple.radius, 0, 2 * Math.PI);
-  context.fill()
+  context.fill();
   context.stroke();
-}
-
-function isGameOver(context) {
-  let snakeHead = snake.position[0];
-
-  let touchTheWallX = snakeHead.x >= context.canvas.width || snakeHead.x <= 0;
-  let touchTheWallY = snakeHead.y >= context.canvas.height || snakeHead.y <= 0;
-
-  if (touchTheWallX || touchTheWallY) {
-    resetTheGame(context);
-  }
-
-  let snakeBody = snake.position.slice(1, snake.position.length)
-
-  if (snake.direction === 'down') {
-    snakeBody.forEach(body => {
-      if ((snakeHead.x === body.x) && (snakeHead.y + 20 === body.y)) {
-        resetTheGame(context);
-      }
-    })
-  }
-
-  if (snake.direction === 'up') {
-    snakeBody.forEach(body => {
-      if ((snakeHead.x === body.x) && (snakeHead.y - 20 === body.y)) {
-        resetTheGame(context);
-      }
-    })
-  }
-
-  if (snake.direction === 'right') {
-    snakeBody.forEach(body => {
-      if ((snakeHead.x + 20 === body.x) && (snakeHead.y === body.y)) {
-        resetTheGame(context);
-      }
-    })
-  }
-
-  if (snake.direction === 'left') {
-    snakeBody.forEach(body => {
-      if ((snakeHead.x - 20 === body.x) && (snakeHead.y === body.y)) {
-        resetTheGame(context);
-      }
-    })
-  }
-
 }
 
 function moveSnake() {
@@ -185,26 +166,45 @@ function drawSnake(context) {
     context.strokeStyle = 'darkblue';
     context.fillRect(position.x, position.y, snake.width, snake.height);
     context.strokeRect(position.x, position.y, snake.width, snake.height);
-  })
+  });
 }
 
-function doesSnakeEatApple(context) {
-  let snakeEatsApple = snake.position[0].x === apple.position.x && snake.position[0].y === apple.position.y;
-  if (snakeEatsApple) {
-    currentScore += 1;
+function doesSnakeTouchTheWall(context) {
+  let snakeHead = snake.position[0];
+  let touchTheWallX = snakeHead.x >= context.canvas.width - 20 || snakeHead.x <= 0;
+  let touchTheWallY = snakeHead.y >= context.canvas.height - 20 || snakeHead.y <= 0;
 
-    increaseSnakeSize();
-    createNewApple(context);
-    updateScore();
-  }
+  return touchTheWallX || touchTheWallY;
+}
+
+function doesSnakeTouchItself() {
+  let snakeHead = snake.position[0];
+  let snakeBody = snake.position.slice(1, snake.position.length)
+  let gameover = false;
+
+  snakeBody.forEach(body => {
+    if ((snake.direction === 'down' && (snakeHead.x === body.x && snakeHead.y + 20 === body.y))
+      || (snake.direction === 'up' && (snakeHead.x === body.x && snakeHead.y - 20 === body.y))
+      || (snake.direction === 'right' && (snakeHead.x + 20 === body.x && snakeHead.y === body.y))
+      || (snake.direction === 'left' && (snakeHead.x - 20 === body.x && snakeHead.y === body.y))) {
+      gameover = true;
+    }
+  });
+
+  return gameover;
+}
+
+function doesSnakeEatApple() {
+  return snake.position[0].x === apple.position.x && snake.position[0].y === apple.position.y;
 }
 
 function increaseSnakeSize() {
   let snakeTail = {
     x: snake.position[snake.position.length - 1].x - snake.xSpeed,
     y: snake.position[snake.position.length - 1].y - snake.ySpeed
-  }
-  snake.position.push(snakeTail)
+  };
+
+  snake.position.push(snakeTail);
 }
 
 function createNewApple(context) {
@@ -216,23 +216,23 @@ function createNewApple(context) {
     if (appleOnSnake) {
       apple.position.x = getRandomNum(0, context.canvas.width - 20);
       apple.position.y = getRandomNum(0, context.canvas.height - 20);
-    }
-  })
+    };
+  });
 }
 
 function getRandomNum(min, max) {
   return 20 * Math.floor((Math.random() * ((max - min) + min) / 20));
 }
 
-function updateScore() {
+function updateScore(currentScore) {
   document.getElementById('score').textContent = currentScore;
 }
 
-function updateBestScore() {
+function updateBestScore(bestScore) {
   document.getElementById('best-score').textContent = bestScore;
 }
 
-function resetTheGame(context) {
+function resetTheGame(context, currentScore, bestScore) {
   snake.position = [
     { x: 200, y: 140 },
     { x: 180, y: 140 },
@@ -240,23 +240,12 @@ function resetTheGame(context) {
     { x: 140, y: 140 },
     { x: 120, y: 140 }
   ];
-  snake.direction = 'right'
+  snake.direction = 'right';
   snake.xSpeed = 20;
   snake.ySpeed = 0;
 
-  keyCode = null;
-
-  if (bestScore <= currentScore) {
-    bestScore = currentScore;
-  }
-  updateBestScore();
-
-  currentScore = 0;
-  updateScore();
-
+  updateScore(currentScore);
+  updateBestScore(bestScore);
   createNewApple(context);
 }
-
-
-
 
