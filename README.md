@@ -9,7 +9,7 @@ Play it [here](https://naamnamm.github.io/snake-game/)
 ## Summary
 This is the first game I have ever created. The most challenging part was figuring out how to turn the snake up-down-left-right. When I worked through it, it helps me realize how important brainstorming and pseudo coding the process is.
 
-I learn to do things better such as not to hard-coding the positions and limiting the scope variable to reduce bugs. This makes my code nicer and cleaner.
+I learn to do things better such as not to hard-coding the positions and limiting the scope of variables to reduce bugs. This makes my code nicer and cleaner.
 
 This also allows me to deepen my knowledge in the fundamentals such as scope variables and object-oriented programing and learn new things such as working with the canvas element.
 
